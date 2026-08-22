@@ -15,7 +15,7 @@
     <nav class="border-b border-slate-200 bg-white">
         <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
 
-            <a href="/" class="flex flex-col">
+            <a href="{{ route('home') }}" class="flex flex-col">
                 <span class="text-2xl font-bold tracking-tight text-teal-600">
                     T-Well
                 </span>
@@ -26,21 +26,27 @@
             </a>
 
             <div class="hidden items-center gap-8 text-sm font-medium md:flex">
-                <a href="/" class="text-slate-600 transition hover:text-teal-600">
+
+                <a href="{{ route('home') }}"
+                   class="text-slate-600 transition hover:text-teal-600">
                     Home
                 </a>
 
-                <a href="#" class="text-teal-600">
+                <a href="#"
+                   class="text-teal-600">
                     My Result
                 </a>
 
-                <a href="#recommendations" class="text-slate-600 transition hover:text-teal-600">
+                <a href="#recommendations"
+                   class="text-slate-600 transition hover:text-teal-600">
                     Recommendations
                 </a>
 
-                <a href="#education" class="text-slate-600 transition hover:text-teal-600">
+                <a href="#education"
+                   class="text-slate-600 transition hover:text-teal-600">
                     Education
                 </a>
+
             </div>
 
         </div>
@@ -72,6 +78,8 @@
 
                 </div>
 
+
+                <!-- Assessment Code -->
                 <div class="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
 
                     <p class="text-xs font-medium text-slate-500">
@@ -79,7 +87,7 @@
                     </p>
 
                     <p class="mt-1 text-sm font-bold tracking-wider text-slate-800">
-                        TW-7K4P-92XM
+                        {{ $assessment->assessment_code }}
                     </p>
 
                 </div>
@@ -114,7 +122,8 @@
                     </p>
 
                     <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-                        2h 15m
+                        {{ intdiv($assessment->screen_time, 60) }}h
+                        {{ $assessment->screen_time % 60 }}m
                     </p>
 
                     <p class="mt-2 text-sm text-slate-500">
@@ -144,7 +153,7 @@
                     </p>
 
                     <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-                        78
+                        {{ number_format($assessment->x_score, 2) }}
                     </p>
 
                     <p class="mt-2 text-sm text-slate-500">
@@ -174,7 +183,7 @@
                     </p>
 
                     <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-                        74
+                        {{ number_format($assessment->y2_score, 2) }}
                     </p>
 
                     <p class="mt-2 text-sm text-slate-500">
@@ -205,24 +214,27 @@
                         <div class="mx-auto flex h-44 w-44 items-center justify-center rounded-full border-[12px] border-teal-100">
 
                             <div>
+
                                 <p class="text-5xl font-bold tracking-tight text-teal-600">
-                                    74
+                                    {{ number_format($assessment->y2_score, 2) }}
                                 </p>
 
                                 <p class="mt-1 text-sm font-semibold text-slate-500">
                                     Score
                                 </p>
+
                             </div>
 
                         </div>
 
+
                         <p class="mt-6 text-lg font-bold text-slate-900">
-                            Good
+                            {{ $assessment->y2_category }}
                         </p>
 
                         <p class="mt-2 text-sm leading-6 text-slate-500">
-                            Your assessment indicates a relatively positive
-                            digital wellbeing condition.
+                            Your assessment indicates a digital wellbeing
+                            condition based on the indicators used in T-Well.
                         </p>
 
                     </div>
@@ -241,24 +253,54 @@
                         Understanding Your Result
                     </h2>
 
-                    <div class="mt-6 space-y-5 text-sm leading-7 text-slate-600">
+                    <div class="mt-6 text-sm leading-7 text-slate-600">
 
                         <p>
-                            Your digital wellbeing score provides an overview
-                            of your current relationship with digital media
-                            based on the assessment indicators.
+                            {{ $assessment->interpretation }}
                         </p>
 
-                        <p>
-                            The result can help you reflect on your TikTok
-                            usage and how personalized content may relate
-                            to your digital experience.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- AI Personalization Overview -->
+        <section class="mx-auto max-w-7xl px-6 pb-10 lg:px-8">
+
+            <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+
+                <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+
+                    <div>
+
+                        <p class="text-sm font-semibold uppercase tracking-wider text-teal-600">
+                            AI Personalization
                         </p>
 
-                        <p>
-                            This assessment is intended as an informational
-                            tool and should be interpreted within the context
-                            of the research indicators used by T-Well.
+                        <h2 class="mt-3 text-2xl font-bold text-slate-900">
+                            Your Perception of AI Personalization
+                        </h2>
+
+                        <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+                            This score represents your perceived personalization
+                            of TikTok content based on the research indicators.
+                        </p>
+
+                    </div>
+
+
+                    <div class="text-left md:text-right">
+
+                        <p class="text-4xl font-bold text-teal-600">
+                            {{ number_format($assessment->x_score, 2) }}
+                        </p>
+
+                        <p class="mt-1 text-sm font-semibold text-slate-500">
+                            {{ $assessment->x_category }}
                         </p>
 
                     </div>
@@ -271,7 +313,8 @@
 
 
         <!-- Recommendations -->
-        <section id="recommendations" class="border-y border-slate-200 bg-white py-20">
+        <section id="recommendations"
+                 class="border-y border-slate-200 bg-white py-20">
 
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
 
@@ -286,8 +329,7 @@
                     </h2>
 
                     <p class="mt-4 leading-7 text-slate-600">
-                        Suggestions based on your assessment profile to help
-                        you develop healthier digital habits.
+                        Suggestions to help you develop healthier digital habits.
                     </p>
 
                 </div>
@@ -381,13 +423,6 @@
                         </p>
 
                     </div>
-
-                    <a
-                        href="#"
-                        class="inline-flex w-fit items-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-teal-500 hover:text-teal-600"
-                    >
-                        Explore Education →
-                    </a>
 
                 </div>
 

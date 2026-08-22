@@ -16,7 +16,7 @@
         <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
 
             <!-- Logo -->
-            <a href="/" class="flex flex-col">
+            <a href="{{ route('home') }}" class="flex flex-col">
                 <span class="text-2xl font-bold tracking-tight text-teal-600">
                     T-Well
                 </span>
@@ -28,7 +28,7 @@
 
             <!-- Navigation -->
             <div class="hidden items-center gap-8 text-sm font-medium md:flex">
-                <a href="#" class="text-teal-600">
+                <a href="{{ route('home') }}" class="text-teal-600">
                     Home
                 </a>
 
@@ -86,23 +86,44 @@
                             Assessment Code
                         </label>
 
-                        <div class="flex flex-col gap-3 sm:flex-row">
+                        <!-- Assessment Form -->
+                        <form
+                            action="{{ route('assessment.show') }}"
+                            method="POST"
+                        >
+                            @csrf
 
-                            <input
-                                id="assessment_code"
-                                type="text"
-                                placeholder="e.g. TW-7K4P-92XM"
-                                class="h-12 w-full rounded-xl border border-slate-300 bg-white px-4 text-sm font-medium uppercase tracking-wider text-slate-900 outline-none transition placeholder:normal-case placeholder:tracking-normal focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
-                            >
+                            <div class="flex flex-col gap-3 sm:flex-row">
 
-                            <button
-                                type="button"
-                                class="h-12 whitespace-nowrap rounded-xl bg-teal-600 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-700 focus:outline-none focus:ring-4 focus:ring-teal-100"
-                            >
-                                View My Assessment
-                            </button>
+                                <input
+                                    id="assessment_code"
+                                    name="assessment_code"
+                                    type="text"
+                                    value="{{ old('assessment_code') }}"
+                                    placeholder="e.g. TW-7K4P-92XM"
+                                    maxlength="20"
+                                    autocomplete="off"
+                                    required
+                                    class="h-12 w-full rounded-xl border border-slate-300 bg-white px-4 text-sm font-medium uppercase tracking-wider text-slate-900 outline-none transition placeholder:normal-case placeholder:tracking-normal focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
+                                >
 
-                        </div>
+                                <button
+                                    type="submit"
+                                    class="h-12 whitespace-nowrap rounded-xl bg-teal-600 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-700 focus:outline-none focus:ring-4 focus:ring-teal-100"
+                                >
+                                    View My Assessment
+                                </button>
+
+                            </div>
+
+                            <!-- Validation Error -->
+                            @if ($errors->has('assessment_code'))
+                                <p class="mt-3 text-sm font-medium text-red-600">
+                                    {{ $errors->first('assessment_code') }}
+                                </p>
+                            @endif
+
+                        </form>
 
                         <p class="mt-3 text-sm leading-6 text-slate-500">
                             Already completed the research questionnaire?
@@ -370,7 +391,7 @@
 
                     <div class="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
 
-                        <div class="flex h-12 w-12 items-center justify-center rounded-xl text-xl bg-teal-50">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-50">
                             ✓
                         </div>
 
