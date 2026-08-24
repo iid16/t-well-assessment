@@ -4,6 +4,556 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans:
+        'Instrument Sans',
+        ui-sans-serif,
+        system-ui,
+        sans-serif,
+        'Apple Color Emoji',
+        'Segoe UI Emoji',
+        'Segoe UI Symbol',
+        'Noto Color Emoji';
+}
+
+
+/* =========================================================
+   T-WELL COLOR SYSTEM
+========================================================= */
+
+:root {
+    --tw-bg: #05030a;
+    --tw-bg-secondary: #0b0713;
+
+    --tw-purple: #7c3aed;
+    --tw-purple-light: #a78bfa;
+    --tw-purple-soft: #c4b5fd;
+    --tw-purple-dark: #4c1d95;
+
+    --tw-text: #f5f3ff;
+    --tw-muted: #9ca3af;
+
+    --tw-border: rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
+}
+
+body {
+    background: var(--tw-bg);
+    color: var(--tw-text);
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+    background: rgba(124, 58, 237, 0.35);
+    color: white;
+}
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.tw-background {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    pointer-events: none;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(124, 58, 237, 0.10),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 85% 70%,
+            rgba(139, 92, 246, 0.07),
+            transparent 30%
+        ),
+        #05030a;
+}
+
+
+/* =========================================================
+   GRID BACKGROUND
+========================================================= */
+
+.tw-background::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(167, 139, 250, 0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(167, 139, 250, 0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 60px 60px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 90%
+        );
+}
+
+
+/* =========================================================
+   GLOW
+========================================================= */
+
+.tw-glow {
+    position: absolute;
+
+    width: 450px;
+    height: 450px;
+
+    border-radius: 9999px;
+
+    background: rgba(124, 58, 237, 0.08);
+
+    filter: blur(110px);
+
+    animation: twGlow 10s ease-in-out infinite;
+}
+
+.tw-glow-1 {
+    top: -180px;
+    left: -150px;
+}
+
+.tw-glow-2 {
+    right: -180px;
+    top: 42%;
+
+    background: rgba(139, 92, 246, 0.06);
+
+    animation-delay: -3s;
+}
+
+.tw-glow-3 {
+    bottom: -220px;
+    left: 35%;
+
+    width: 350px;
+    height: 350px;
+
+    background: rgba(91, 33, 182, 0.07);
+
+    animation-delay: -6s;
+}
+
+@keyframes twGlow {
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate3d(0, -20px, 0) scale(1.06);
+    }
+}
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+.reveal,
+.reveal-left,
+.reveal-right,
+.reveal-scale {
+    opacity: 0;
+
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal {
+    transform: translateY(45px);
+}
+
+.reveal-left {
+    transform: translateX(-50px);
+}
+
+.reveal-right {
+    transform: translateX(50px);
+}
+
+.reveal-scale {
+    transform: scale(0.92);
+}
+
+.reveal.active,
+.reveal-left.active,
+.reveal-right.active,
+.reveal-scale.active {
+    opacity: 1;
+    transform: none;
+}
+
+
+/* =========================================================
+   NAVIGATION LINK
+========================================================= */
+
+.tw-nav-link {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+
+    color: #9ca3af;
+
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.tw-nav-link::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    bottom: -7px;
+
+    width: 100%;
+    height: 2px;
+
+    border-radius: 9999px;
+
+    background: linear-gradient(
+        90deg,
+        #a78bfa,
+        #7c3aed
+    );
+
+    transform: scaleX(0);
+    transform-origin: center;
+
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+
+    opacity: 0;
+}
+
+.tw-nav-link:hover {
+    color: #ffffff;
+    transform: scale(1.08);
+}
+
+.tw-nav-link:hover::after {
+    transform: scaleX(1);
+    opacity: 1;
+}
+
+.tw-nav-link.active {
+    color: #c4b5fd;
+}
+
+.tw-nav-link.active::after {
+    transform: scaleX(1);
+    opacity: 1;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.tw-card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.045),
+            rgba(255, 255, 255, 0.015)
+        );
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 20px 70px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+    transition:
+        transform 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease,
+        background 0.35s ease;
+}
+
+.tw-card:hover {
+    transform: translateY(-5px);
+
+    border-color: rgba(167, 139, 250, 0.22);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(139, 92, 246, 0.07),
+            rgba(255, 255, 255, 0.015)
+        );
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.35),
+        0 0 45px rgba(124, 58, 237, 0.07);
+}
+
+
+/* =========================================================
+   TEXT HOVER
+========================================================= */
+
+.tw-hover-text {
+    display: inline-block;
+
+    transition:
+        transform 0.3s ease,
+        color 0.3s ease;
+}
+
+.tw-hover-text:hover {
+    transform: scale(1.04);
+    color: #c4b5fd;
+}
+
+
+/* =========================================================
+   GRADIENT TEXT
+========================================================= */
+
+.tw-gradient-text {
+    background:
+        linear-gradient(
+            135deg,
+            #c4b5fd 0%,
+            #a78bfa 35%,
+            #7c3aed 75%,
+            #6d28d9 100%
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+/* =========================================================
+   FLOATING
+========================================================= */
+
+.tw-floating {
+    animation: twFloat 6s ease-in-out infinite;
+}
+
+@keyframes twFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+
+/* =========================================================
+   RESULT PAGE
+========================================================= */
+
+.tw-result-page {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(124, 58, 237, 0.08),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 60%,
+            rgba(139, 92, 246, 0.06),
+            transparent 30%
+        ),
+        #05030a;
+}
+
+.tw-result-section {
+    border-color: rgba(255, 255, 255, 0.07);
+}
+
+.tw-result-card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.045),
+            rgba(255, 255, 255, 0.015)
+        );
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-shadow:
+        0 20px 70px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    transition:
+        transform 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.tw-result-card:hover {
+    transform: translateY(-5px);
+
+    border-color: rgba(167, 139, 250, 0.22);
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.35),
+        0 0 45px rgba(124, 58, 237, 0.08);
+}
+
+
+/* =========================================================
+   PURPLE ICON BOX
+========================================================= */
+
+.tw-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(167, 139, 250, 0.18);
+
+    background: rgba(124, 58, 237, 0.10);
+
+    color: #c4b5fd;
+
+    transition:
+        transform 0.3s ease,
+        background 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.tw-result-card:hover .tw-icon,
+.tw-card:hover .tw-icon {
+    transform: scale(1.08);
+
+    background: rgba(124, 58, 237, 0.16);
+
+    border-color: rgba(167, 139, 250, 0.30);
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.tw-button {
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        filter 0.3s ease;
+}
+
+.tw-button:hover {
+    transform: translateY(-2px);
+
+    filter: brightness(1.08);
+
+    box-shadow:
+        0 12px 30px rgba(76, 29, 149, 0.35);
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.tw-input {
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease;
+}
+
+.tw-input:focus {
+    border-color: rgba(139, 92, 246, 0.65);
+
+    background: rgba(124, 58, 237, 0.05);
+
+    box-shadow:
+        0 0 0 4px rgba(124, 58, 237, 0.10);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.tw-footer {
+    border-color: rgba(255, 255, 255, 0.06);
+
+    background: rgba(0, 0, 0, 0.20);
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+nav {
+    will-change: backdrop-filter;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
