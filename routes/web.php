@@ -22,3 +22,6 @@ Route::get('/profile', function () {
 // Proses Assessment Code
 Route::post('/assessment', [AssessmentController::class, 'show'])
     ->name('assessment.show');
+
+Route::view('/peneliti/personalisasi-algoritma', 'personalization')->name('personalization');
+Route::view('/peneliti/screen-time-digital-wellbeing', 'screen-wellbeing')->name('screen.wellbeing');

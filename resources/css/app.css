@@ -557,3 +557,140 @@ nav {
         transition-duration: 0.01ms !important;
     }
 }
+/* =========================================================
+   T-WELL NAVIGATION LINKS
+========================================================= */
+
+.tw-nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.tw-nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    height: 2px;
+    border-radius: 9999px;
+    background: linear-gradient(
+        90deg,
+        #8b5cf6,
+        #c4b5fd
+    );
+
+    transform: scaleX(0);
+    transform-origin: center;
+
+    transition: transform 0.3s ease;
+}
+
+.tw-nav-link:hover {
+    color: white;
+    transform: translateY(-1px);
+}
+
+.tw-nav-link:hover::after,
+.tw-nav-link.active::after {
+    transform: scaleX(1);
+}
+
+.tw-nav-link.active {
+    color: #c4b5fd;
+}
+
+
+/* =========================================================
+   DETAIL BUTTON
+========================================================= */
+
+.tw-detail-button {
+    position: relative;
+
+    display: flex;
+    width: 100%;
+
+    align-items: center;
+    justify-content: space-between;
+
+    border: 1px solid rgba(139, 92, 246, 0.35);
+
+    border-radius: 0.75rem;
+
+    background: rgba(124, 58, 237, 0.05);
+
+    padding: 0.8rem 1rem;
+
+    font-size: 0.875rem;
+    font-weight: 600;
+
+    color: #c4b5fd;
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.tw-detail-button:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(167, 139, 250, 0.65);
+
+    background: rgba(124, 58, 237, 0.12);
+
+    box-shadow:
+        0 10px 35px rgba(76, 29, 149, 0.18);
+}
+
+.tw-detail-arrow {
+    font-size: 1.2rem;
+
+    transition:
+        transform 0.3s ease;
+}
+
+.tw-detail-button:hover .tw-detail-arrow {
+    transform: translateX(5px);
+}
+
+
+/* =========================================================
+   BACK LINK
+========================================================= */
+
+.tw-back-link {
+    display: inline-flex;
+
+    align-items: center;
+
+    color: #9ca3af;
+
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.tw-back-link:hover {
+    color: #c4b5fd;
+
+    transform: translateX(-3px);
+}
+
+
+/* =========================================================
+   CONTENT STRONG
+========================================================= */
+
+strong {
+    color: #e9e7ff;
+}
