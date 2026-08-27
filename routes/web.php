@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SelfAssessmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -78,6 +79,19 @@ Route::post('/logout', [AuthController::class, 'logout'])
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth')->name('dashboard');
+
+
+// =========================================================
+// SELF-ASSESSMENT
+// =========================================================
+
+Route::middleware('auth')->group(function () {
+    Route::get('/self-assessment', [SelfAssessmentController::class, 'create'])
+        ->name('self-assessment.create');
+
+    Route::post('/self-assessment', [SelfAssessmentController::class, 'store'])
+        ->name('self-assessment.store');
+});
 
 
 // =========================================================
