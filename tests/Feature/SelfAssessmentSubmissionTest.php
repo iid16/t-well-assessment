@@ -25,16 +25,32 @@ class SelfAssessmentSubmissionTest extends TestCase
         ])->assertRedirect(route('login'));
     }
 
-    public function test_an_authenticated_user_can_open_the_instrument_payload(): void
+    public function test_an_authenticated_user_can_open_the_self_assessment_form_with_all_official_items(): void
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user)
+        $response = $this->actingAs($user)
             ->get(route('self-assessment.create'))
             ->assertOk()
-            ->assertJsonCount(25, 'items')
-            ->assertJsonPath('items.0.code', 'X01')
-            ->assertJsonPath('items.24.code', 'Y212');
+            ->assertViewIs('self-assessment.create')
+            ->assertViewHas('items', function (array $items): bool {
+                return count($items) === 25
+                    && $items[0]['code'] === 'X01'
+                    && $items[24]['code'] === 'Y212';
+            })
+            ->assertSee('Kirim Self-Assessment')
+            ->assertSee('menit/hari')
+            ->assertSee('Sangat Tidak Setuju')
+            ->assertSee('action="'.route('self-assessment.store').'"', false)
+            ->assertSee('name="_token"', false)
+            ->assertSee('type="radio"', false)
+            ->assertSee('type="number"', false)
+            ->assertDontSee('min="', false)
+            ->assertDontSee('max="', false);
+
+        foreach (AssessmentInstrument::items() as $item) {
+            $response->assertSee('name="answers['.$item['code'].']"', false);
+        }
 
         $this->assertDatabaseCount('assessment_sessions', 0);
     }
@@ -44,9 +60,12 @@ class SelfAssessmentSubmissionTest extends TestCase
         $answers = $this->validAnswers();
         unset($answers['X01']);
 
-        $this->actingAs(User::factory()->create())
+        $this->followingRedirects()
+            ->actingAs(User::factory()->create())
+            ->from(route('self-assessment.create'))
             ->post(route('self-assessment.store'), ['answers' => $answers])
-            ->assertSessionHasErrors(['answers', 'answers.X01']);
+            ->assertOk()
+            ->assertSee('Mohon lengkapi semua jawaban yang wajib diisi.');
 
         $this->assertDatabaseCount('assessment_sessions', 0);
         $this->assertDatabaseCount('assessment_answers', 0);
@@ -112,6 +131,13 @@ class SelfAssessmentSubmissionTest extends TestCase
             ->assertSessionHas('self_assessment_submission.message', 'Assessment berhasil disimpan.')
             ->assertSessionHas('self_assessment_submission.assessment_code', $session->assessment_code);
 
+        $this->actingAs($user)
+            ->get(route('self-assessment.create'))
+            ->assertOk()
+            ->assertSee('Assessment berhasil disimpan.')
+            ->assertSee('Kode assessment Anda:')
+            ->assertSee($session->assessment_code);
+
         $this->assertSame($user->id, $session->user_id);
         $this->assertNotNull($session->started_at);
         $this->assertNotNull($session->submitted_at);
@@ -124,6 +150,15 @@ class SelfAssessmentSubmissionTest extends TestCase
             fn (AssessmentAnswer $answer): bool => $answer->assessment_session_id === $session->id
         ));
         $this->assertDatabaseCount('assessment_results', 0);
+    }
+
+    public function test_dashboard_links_to_the_self_assessment_form(): void
+    {
+        $this->actingAs(User::factory()->create())
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('Mulai Self-Assessment')
+            ->assertSee('href="'.route('self-assessment.create').'"', false);
     }
 
     public function test_assessment_codes_are_unique_for_multiple_submissions(): void

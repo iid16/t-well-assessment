@@ -5,19 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SubmitAssessmentRequest;
 use App\Models\AssessmentSession;
 use App\Support\AssessmentInstrument;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use LogicException;
 
 class SelfAssessmentController extends Controller
 {
-    public function create(Request $request): JsonResponse
+    public function create(Request $request): View
     {
-        return response()->json([
+        return view('self-assessment.create', [
             'items' => AssessmentInstrument::items(),
-            'likert_scale' => AssessmentInstrument::LIKERT_SCALE,
+            'likertScale' => AssessmentInstrument::LIKERT_SCALE,
             'submission' => $request->session()->get('self_assessment_submission'),
         ]);
     }

@@ -97,16 +97,16 @@
                     </h2>
 
                     <p class="mt-3 leading-7 text-gray-400">
-                        Lakukan assessment untuk mengetahui hasil
-                        berdasarkan indikator penelitian T-Well.
+                        Isi seluruh pertanyaan Self-Assessment sesuai
+                        pengalaman penggunaan TikTok Anda.
                     </p>
 
-                    <button
-                        type="button"
+                    <a
+                        href="{{ route('self-assessment.create') }}"
                         class="mt-6 rounded-xl bg-violet-700 px-5 py-3 text-sm font-semibold transition hover:bg-violet-600"
                     >
-                        Mulai Assessment
-                    </button>
+                        Mulai Self-Assessment
+                    </a>
 
                 </div>
 
