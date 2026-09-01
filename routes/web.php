@@ -91,6 +91,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/self-assessment', [SelfAssessmentController::class, 'store'])
         ->name('self-assessment.store');
+
+    Route::get('/self-assessment/success', [SelfAssessmentController::class, 'showSuccess'])
+        ->name('self-assessment.success');
 });
 
 

@@ -39,21 +39,6 @@
                     Semua pertanyaan wajib dijawab. Gunakan pengalaman penggunaan TikTok Anda sebagai acuan.
                 </p>
 
-                @if ($submission)
-                    <div
-                        class="mt-6 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4 text-emerald-100"
-                        role="status"
-                    >
-                        <p class="font-semibold">
-                            {{ $submission['message'] }}
-                        </p>
-
-                        <p class="mt-1 text-sm text-emerald-200">
-                            Kode assessment Anda: <span class="font-semibold">{{ $submission['assessment_code'] }}</span>
-                        </p>
-                    </div>
-                @endif
-
                 @if ($errors->any())
                     <div
                         class="mt-6 rounded-2xl border border-red-400/30 bg-red-500/10 p-4 text-sm text-red-100"

@@ -18,7 +18,19 @@ class SelfAssessmentController extends Controller
         return view('self-assessment.create', [
             'items' => AssessmentInstrument::items(),
             'likertScale' => AssessmentInstrument::LIKERT_SCALE,
-            'submission' => $request->session()->get('self_assessment_submission'),
+        ]);
+    }
+
+    public function showSuccess(Request $request): View|RedirectResponse
+    {
+        $assessmentCode = $request->session()->pull('self_assessment_success_code');
+
+        if ($assessmentCode === null) {
+            return redirect()->route('self-assessment.create');
+        }
+
+        return view('self-assessment.success', [
+            'assessmentCode' => $assessmentCode,
         ]);
     }
 
@@ -50,12 +62,9 @@ class SelfAssessmentController extends Controller
             return $session;
         });
 
-        return redirect()
-            ->route('self-assessment.create')
-            ->with('self_assessment_submission', [
-                'message' => 'Assessment berhasil disimpan.',
-                'assessment_code' => $session->assessment_code,
-            ]);
+        $request->session()->put('self_assessment_success_code', $session->assessment_code);
+
+        return redirect()->route('self-assessment.success');
     }
 
     private function assessmentCodeFor(AssessmentSession $session): string

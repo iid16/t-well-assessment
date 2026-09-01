@@ -111,7 +111,7 @@ class SelfAssessmentSubmissionTest extends TestCase
 
         $this->actingAs($user)
             ->post(route('self-assessment.store'), ['answers' => $answers])
-            ->assertRedirect(route('self-assessment.create'));
+            ->assertRedirect(route('self-assessment.success'));
 
         $session = AssessmentSession::sole();
 
@@ -133,16 +133,17 @@ class SelfAssessmentSubmissionTest extends TestCase
         $answers = $session->answers()->get();
 
         $response
-            ->assertRedirect(route('self-assessment.create'))
-            ->assertSessionHas('self_assessment_submission.message', 'Assessment berhasil disimpan.')
-            ->assertSessionHas('self_assessment_submission.assessment_code', $session->assessment_code);
+            ->assertRedirect(route('self-assessment.success'))
+            ->assertSessionHas('self_assessment_success_code', $session->assessment_code);
 
         $this->actingAs($user)
-            ->get(route('self-assessment.create'))
+            ->get(route('self-assessment.success'))
             ->assertOk()
-            ->assertSee('Assessment berhasil disimpan.')
-            ->assertSee('Kode assessment Anda:')
-            ->assertSee($session->assessment_code);
+            ->assertSee($session->assessment_code)
+            ->assertSee('data-copy="'.$session->assessment_code.'"', false)
+            ->assertSee('Kembali ke Dashboard')
+            ->assertDontSee('Kirim Self-Assessment')
+            ->assertDontSee('name="answers[', false);
 
         $this->assertSame($user->id, $session->user_id);
         $this->assertNotNull($session->started_at);
@@ -156,6 +157,59 @@ class SelfAssessmentSubmissionTest extends TestCase
             fn (AssessmentAnswer $answer): bool => $answer->assessment_session_id === $session->id
         ));
         $this->assertDatabaseCount('assessment_results', 0);
+    }
+
+    public function test_success_page_redirects_back_when_no_code_in_session(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get(route('self-assessment.success'))
+            ->assertRedirect(route('self-assessment.create'));
+    }
+
+    public function test_success_page_displays_assessment_code_and_no_form(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->post(route('self-assessment.store'), ['answers' => $this->validAnswers()]);
+
+        $session = AssessmentSession::sole();
+
+        $this->actingAs($user)
+            ->get(route('self-assessment.success'))
+            ->assertOk()
+            ->assertViewIs('self-assessment.success')
+            ->assertSee($session->assessment_code)
+            ->assertSee('Kode Assessment Anda')
+            ->assertSee('Simpan kode ini untuk melihat hasil assessment Anda.')
+            ->assertSee('Kembali ke Dashboard')
+            ->assertSee('href="'.route('dashboard').'"', false)
+            ->assertDontSee('Kirim Self-Assessment')
+            ->assertDontSee('name="answers[', false)
+            ->assertDontSee('type="radio"', false)
+            ->assertDontSee('type="number"', false)
+            ->assertDontSee('Sangat Tidak Setuju');
+
+        $this->assertCount(25, $session->answers);
+    }
+
+    public function test_success_page_has_copy_button(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->post(route('self-assessment.store'), ['answers' => $this->validAnswers()]);
+
+        $session = AssessmentSession::sole();
+
+        $this->actingAs($user)
+            ->get(route('self-assessment.success'))
+            ->assertOk()
+            ->assertSee('data-copy="'.$session->assessment_code.'"', false)
+            ->assertSee('Salin Kode', false)
+            ->assertSee('navigator.clipboard', false);
     }
 
     public function test_dashboard_links_to_the_self_assessment_form(): void
@@ -195,7 +249,7 @@ class SelfAssessmentSubmissionTest extends TestCase
                 'user_id' => $anotherUser->id,
                 'answers' => $this->validAnswers(),
             ])
-            ->assertRedirect(route('self-assessment.create'));
+            ->assertRedirect(route('self-assessment.success'));
 
         $this->assertDatabaseHas('assessment_sessions', [
             'user_id' => $user->id,
@@ -258,7 +312,7 @@ class SelfAssessmentSubmissionTest extends TestCase
 
         $this->actingAs(User::factory()->create())
             ->post(route('self-assessment.store'), ['answers' => $this->validAnswers()])
-            ->assertRedirect(route('self-assessment.create'));
+            ->assertRedirect(route('self-assessment.success'));
 
         $this->assertSame($before, $legacy->fresh()->only(array_keys($before)));
         $this->assertNull($legacy->fresh()->assessment_session_id);
