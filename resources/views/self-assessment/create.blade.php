@@ -35,7 +35,7 @@
                     Jawab sesuai pengalaman Anda
                 </h1>
 
-                <p class="mt-3 max-w-2xl leading-7 text-gray-400">
+                <p id="self-assessment-instructions" class="mt-3 max-w-2xl leading-7 text-gray-400">
                     Semua pertanyaan wajib dijawab. Gunakan pengalaman penggunaan TikTok Anda sebagai acuan.
                 </p>
 
@@ -67,6 +67,8 @@
                     action="{{ route('self-assessment.store') }}"
                     method="POST"
                     class="mt-8 space-y-8"
+                    aria-describedby="self-assessment-instructions"
+                    data-self-assessment
                 >
                     @csrf
 
@@ -114,7 +116,7 @@
                             </p>
 
                             @if ($item['response_type'] === 'likert')
-                                <div class="mt-4 grid gap-2 sm:grid-cols-5">
+                                <div class="mt-4 grid gap-2 sm:grid-cols-5" role="radiogroup" aria-label="{{ $item['code'] }} — {{ $item['question'] }}">
                                     @foreach ($likertScale as $value => $label)
                                         <label
                                             for="{{ $item['code'] }}-{{ $value }}"
@@ -132,7 +134,7 @@
 
                                             <span>
                                                 <span class="font-semibold">{{ $value }}</span>
-                                                <span class="block text-xs text-gray-400 sm:hidden">{{ $label }}</span>
+                                                <span class="block text-xs text-gray-400 sm:sr-only">{{ $label }}</span>
                                             </span>
                                         </label>
                                     @endforeach
@@ -170,6 +172,7 @@
                                 <p
                                     id="{{ $item['code'] }}-error"
                                     class="mt-3 text-sm text-red-300"
+                                    aria-live="polite"
                                 >
                                     {{ $message }}
                                 </p>
@@ -193,6 +196,21 @@
             </div>
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.querySelector('form[data-self-assessment]');
+            if (!form) return;
+            form.addEventListener('submit', function () {
+                var btn = form.querySelector('button[type="submit"]');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.textContent = 'Mengirim...';
+                    btn.classList.add('pointer-events-none', 'opacity-60');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

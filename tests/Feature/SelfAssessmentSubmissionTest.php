@@ -46,7 +46,12 @@ class SelfAssessmentSubmissionTest extends TestCase
             ->assertSee('type="radio"', false)
             ->assertSee('type="number"', false)
             ->assertDontSee('min="', false)
-            ->assertDontSee('max="', false);
+            ->assertDontSee('max="', false)
+            ->assertSee('id="self-assessment-instructions"', false)
+            ->assertSee('aria-describedby="self-assessment-instructions"', false)
+            ->assertSee('role="radiogroup"', false)
+            ->assertSee('aria-label="X01', false)
+            ->assertSee('Mengirim...', false);
 
         foreach (AssessmentInstrument::items() as $item) {
             $response->assertSee('name="answers['.$item['code'].']"', false);
@@ -65,7 +70,8 @@ class SelfAssessmentSubmissionTest extends TestCase
             ->from(route('self-assessment.create'))
             ->post(route('self-assessment.store'), ['answers' => $answers])
             ->assertOk()
-            ->assertSee('Mohon lengkapi semua jawaban yang wajib diisi.');
+            ->assertSee('Mohon lengkapi semua jawaban yang wajib diisi.')
+            ->assertSee('aria-live="polite"', false);
 
         $this->assertDatabaseCount('assessment_sessions', 0);
         $this->assertDatabaseCount('assessment_answers', 0);
@@ -256,6 +262,50 @@ class SelfAssessmentSubmissionTest extends TestCase
 
         $this->assertSame($before, $legacy->fresh()->only(array_keys($before)));
         $this->assertNull($legacy->fresh()->assessment_session_id);
+    }
+
+    public function test_the_self_assessment_form_contains_double_submit_protection_script(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get(route('self-assessment.create'))
+            ->assertOk()
+            ->assertSee('data-self-assessment', false)
+            ->assertSee('btn.disabled = true', false)
+            ->assertSee('Mengirim...', false);
+    }
+
+    public function test_the_error_banner_uses_role_alert(): void
+    {
+        $user = User::factory()->create();
+
+        $this->followingRedirects()
+            ->actingAs($user)
+            ->from(route('self-assessment.create'))
+            ->post(route('self-assessment.store'), ['answers' => []])
+            ->assertSee('role="alert"', false)
+            ->assertSee('Mohon lengkapi semua jawaban yang wajib diisi.');
+    }
+
+    public function test_radio_groups_have_proper_accessibility_attributes(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->get(route('self-assessment.create'))
+            ->assertOk();
+
+        foreach (AssessmentInstrument::items() as $item) {
+            if ($item['response_type'] === 'likert') {
+                $response->assertSee(
+                    'aria-label="'.$item['code'].' — '.$item['question'].'"',
+                    false
+                );
+            }
+        }
+
+        $response->assertSee('role="radiogroup"', false);
     }
 
     /**
