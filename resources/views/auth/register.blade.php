@@ -134,15 +134,19 @@
                         >
                             Password
                         </label>
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            autocomplete="new-password"
-                            required
-                            placeholder="Minimal 8 karakter"
-                            class="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
-                        >
+                        <div class="relative">
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                autocomplete="new-password"
+                                required
+                                placeholder="Minimal 8 karakter"
+                                class="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 pr-12 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                            >
+
+                            <x-password-toggle-button for="password" />
+                        </div>
                         @error('password')
                             <p class="mt-2 text-sm text-red-400">
                                 {{ $message }}
@@ -157,15 +161,19 @@
                         >
                             Konfirmasi Password
                         </label>
-                        <input
-                            id="password_confirmation"
-                            name="password_confirmation"
-                            type="password"
-                            autocomplete="new-password"
-                            required
-                            placeholder="Ulangi password"
-                            class="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
-                        >
+                        <div class="relative">
+                            <input
+                                id="password_confirmation"
+                                name="password_confirmation"
+                                type="password"
+                                autocomplete="new-password"
+                                required
+                                placeholder="Ulangi password"
+                                class="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 pr-12 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                            >
+
+                            <x-password-toggle-button for="password_confirmation" />
+                        </div>
                     </div>
                     <!-- SUBMIT -->
                     <button

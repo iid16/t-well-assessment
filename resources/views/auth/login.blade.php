@@ -138,15 +138,19 @@
 
                         </div>
 
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            autocomplete="current-password"
-                            required
-                            placeholder="Masukkan password"
-                            class="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
-                        >
+                        <div class="relative">
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                autocomplete="current-password"
+                                required
+                                placeholder="Masukkan password"
+                                class="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 pr-12 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                            >
+
+                            <x-password-toggle-button for="password" />
+                        </div>
 
                         @error('password')
                             <p class="mt-2 text-sm text-red-400">

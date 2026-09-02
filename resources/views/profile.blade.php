@@ -76,10 +76,10 @@
 
 
                 <a
-                    href="{{ route('home') }}#result"
+                    href="{{ route('login') }}"
                     class="tw-nav-link text-gray-400"
                 >
-                    Lihat Hasil
+                    Login
                 </a>
 
             </div>
@@ -510,32 +510,33 @@
                 <h2
                     class="mt-4 text-3xl font-bold sm:text-4xl"
                 >
-                    Lihat Hasil Assessment Anda
+                    Masuk untuk mengisi Self-Assessment
                 </h2>
 
 
                 <p
                     class="mx-auto mt-5 max-w-2xl leading-8 text-gray-400"
                 >
-                    Gunakan Assessment Code yang telah Anda peroleh
-                    untuk melihat hasil assessment dan memahami kondisi
-                    penggunaan TikTok serta kesejahteraan digital Anda.
+                    Self-Assessment hanya dapat diisi setelah Anda
+                    masuk ke akun T-Well Assessment.
                 </p>
 
 
-                <div class="mt-8">
+                <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
 
                     <a
-                        href="{{ route('home') }}#result"
+                        href="{{ route('login') }}"
                         class="inline-flex items-center rounded-xl bg-gradient-to-r from-violet-700 to-purple-600 px-7 py-3.5 font-semibold text-white shadow-lg shadow-purple-950/30 transition duration-300 hover:-translate-y-1 hover:from-violet-600 hover:to-purple-500"
                     >
+                        Login
+                    </a>
 
-                        Lihat Hasil Assessment
 
-                        <span class="ml-2">
-                            →
-                        </span>
-
+                    <a
+                        href="{{ route('register') }}"
+                        class="inline-flex items-center rounded-xl border border-white/10 bg-white/[0.03] px-7 py-3.5 font-semibold text-gray-300 transition duration-300 hover:border-violet-400/30 hover:bg-violet-500/[0.08] hover:text-white"
+                    >
+                        Register
                     </a>
 
                 </div>

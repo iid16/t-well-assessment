@@ -118,12 +118,21 @@
                 </a>
 
 
-                <a
-                    href="{{ route('home') }}#result"
-                    class="rounded-lg border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-violet-200 transition duration-300 hover:scale-105 hover:border-violet-400/40 hover:bg-violet-500/20 hover:text-white"
-                >
-                    Lihat Hasil
-                </a>
+                @guest
+                    <a
+                        href="{{ route('login') }}"
+                        class="rounded-lg border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-violet-200 transition duration-300 hover:scale-105 hover:border-violet-400/40 hover:bg-violet-500/20 hover:text-white"
+                    >
+                        Login
+                    </a>
+                @else
+                    <a
+                        href="{{ route('dashboard') }}"
+                        class="rounded-lg border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-violet-200 transition duration-300 hover:scale-105 hover:border-violet-400/40 hover:bg-violet-500/20 hover:text-white"
+                    >
+                        Dashboard
+                    </a>
+                @endguest
 
             </div>
 
@@ -242,10 +251,10 @@
 
 
                         <a
-                            href="{{ route('home') }}#result"
+                            href="{{ route('login') }}"
                             class="inline-flex h-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] px-7 text-sm font-semibold text-gray-300 transition duration-300 hover:border-violet-400/30 hover:bg-violet-500/[0.08] hover:text-white"
                         >
-                            Lihat Hasil Assessment
+                            Login
                         </a>
 
                     </div>
@@ -799,7 +808,7 @@
 
 
         <!-- =========================================================
-             SECTION 5 — ASSESSMENT CODE
+             SECTION 5 — AUTHENTICATION
         ========================================================== -->
 
         <section
@@ -823,93 +832,45 @@
                     <p
                         class="text-sm font-semibold uppercase tracking-[0.2em] text-violet-300"
                     >
-                        Assessment Code
+                        Mulai Assessment
                     </p>
 
 
                     <h2
                         class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl"
                     >
-                        Lihat Hasil Assessment Anda
+                        Masuk atau daftar untuk mengisi Self-Assessment
                     </h2>
 
 
                     <p
                         class="mx-auto mt-5 max-w-2xl leading-8 text-gray-400"
                     >
-                        Sudah mengikuti kuesioner penelitian?
-
-                        Masukkan Assessment Code yang Anda terima
-                        untuk melihat hasil assessment Anda.
+                        Self-Assessment hanya dapat diisi setelah Anda
+                        masuk ke akun T-Well Assessment.
                     </p>
 
 
-
-                    <!-- FORM -->
-
-                    <form
-                        action="{{ route('assessment.show') }}"
-                        method="POST"
-                        class="mx-auto mt-9 max-w-xl"
+                    <div
+                        class="mx-auto mt-9 flex max-w-xl flex-col gap-3 sm:flex-row sm:justify-center"
                     >
 
-                        @csrf
-
-
-                        <label
-                            for="assessment_code"
-                            class="mb-3 block text-left text-sm font-semibold text-gray-300"
+                        <a
+                            href="{{ route('login') }}"
+                            class="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-700 to-purple-600 px-7 text-sm font-semibold text-white shadow-lg shadow-purple-950/30 transition duration-300 hover:-translate-y-0.5 hover:from-violet-600 hover:to-purple-500"
                         >
-                            Assessment Code
-                        </label>
+                            Login
+                        </a>
 
 
-                        <div
-                            class="flex flex-col gap-3 sm:flex-row"
+                        <a
+                            href="{{ route('register') }}"
+                            class="inline-flex h-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] px-7 text-sm font-semibold text-gray-300 transition duration-300 hover:border-violet-400/30 hover:bg-violet-500/[0.08] hover:text-white"
                         >
+                            Register
+                        </a>
 
-                            <input
-                                id="assessment_code"
-                                name="assessment_code"
-                                type="text"
-                                value="{{ old('assessment_code') }}"
-                                placeholder="Contoh: TW-7K4P-92XM"
-                                maxlength="20"
-                                autocomplete="off"
-                                required
-                                class="h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 text-sm font-medium uppercase tracking-wider text-white outline-none transition placeholder:normal-case placeholder:tracking-normal placeholder:text-gray-600 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
-                            >
-
-
-                            <button
-                                type="submit"
-                                class="h-12 whitespace-nowrap rounded-xl bg-gradient-to-r from-violet-700 to-purple-600 px-7 text-sm font-semibold text-white shadow-lg shadow-purple-950/30 transition duration-300 hover:-translate-y-0.5 hover:from-violet-600 hover:to-purple-500 focus:outline-none focus:ring-4 focus:ring-violet-500/20"
-                            >
-                                Lihat Hasil
-                            </button>
-
-                        </div>
-
-
-                        @if ($errors->has('assessment_code'))
-
-                            <p
-                                class="mt-3 text-left text-sm font-medium text-red-400"
-                            >
-                                {{ $errors->first('assessment_code') }}
-                            </p>
-
-                        @endif
-
-                    </form>
-
-
-                    <p
-                        class="mt-6 text-xs leading-6 text-gray-600"
-                    >
-                        Gunakan kode assessment yang diberikan setelah
-                        mengikuti penelitian.
-                    </p>
+                    </div>
 
                 </div>
 

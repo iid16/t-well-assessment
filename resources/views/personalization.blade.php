@@ -67,9 +67,9 @@
                     Tentang
                 </a>
 
-                <a href="{{ route('home') }}#result"
+                <a href="{{ route('login') }}"
                     class="rounded-lg border border-violet-400/20 bg-violet-500/10 px-4 py-2 text-violet-200 transition duration-300 hover:scale-105 hover:border-violet-400/40 hover:bg-violet-500/20 hover:text-white">
-                    Lihat Hasil
+                    Login
                 </a>
 
             </div>

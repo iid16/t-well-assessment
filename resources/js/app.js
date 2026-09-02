@@ -66,4 +66,47 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Password visibility
+    |--------------------------------------------------------------------------
+    */
+
+    document.querySelectorAll('[data-password-toggle]').forEach((button) => {
+        const inputId = button.getAttribute('aria-controls');
+        const input = inputId ? document.getElementById(inputId) : null;
+
+        if (!(input instanceof HTMLInputElement)) {
+            return;
+        }
+
+        const showIcon = button.querySelector('[data-password-icon="show"]');
+        const hideIcon = button.querySelector('[data-password-icon="hide"]');
+
+        const syncToggleState = () => {
+            const isVisible = input.type === 'text';
+
+            button.setAttribute('aria-pressed', isVisible ? 'true' : 'false');
+            button.setAttribute(
+                'aria-label',
+                isVisible ? 'Sembunyikan password' : 'Tampilkan password'
+            );
+
+            if (showIcon instanceof HTMLElement) {
+                showIcon.hidden = isVisible;
+            }
+
+            if (hideIcon instanceof HTMLElement) {
+                hideIcon.hidden = !isVisible;
+            }
+        };
+
+        button.addEventListener('click', () => {
+            input.type = input.type === 'password' ? 'text' : 'password';
+            syncToggleState();
+        });
+
+        syncToggleState();
+    });
 });
